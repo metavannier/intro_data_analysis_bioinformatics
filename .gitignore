@@ -1,0 +1,12 @@
+.snakemake/
+00_RawData
+01_Reference
+.vscode/
+.bash_history/
+.cache/
+.conda/
+.config/
+.java/
+.local/
+.singularity/
+snakemake_virtenv/
