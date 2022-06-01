@@ -4,8 +4,4 @@ channels:
   - defaults
   - r
 dependencies:
-<<<<<<< HEAD
   - multiqc=1.11
-=======
-  - multiqc=1.10.1
->>>>>>> bb08eafa35156c8f66c9edebb1959dc13e38ba05

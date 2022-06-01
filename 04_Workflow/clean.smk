@@ -3,26 +3,6 @@ RUN =  config["run"]["type"].split(',')
 EXT = config["run"]["ext"]
 
 # ----------------------------------------------
-<<<<<<< HEAD
-=======
-# FastQC to check the reads quality
-# ----------------------------------------------
-rule fastqc:
-  output:
-    expand( "05_Output/01_fastqc/{samples}_{run}_fastqc.html", samples=SAMPLES, run=RUN),
-    expand( "05_Output/01_fastqc/{samples}_{run}_fastqc.zip", samples=SAMPLES, run=RUN)
-
-  input:
-    expand( "00_RawData/{samples}_{run}.{ext}", samples=SAMPLES, run=RUN, ext=EXT)
-
-  conda: 
-    CONTAINER + "fastqc.yaml"
-
-  shell:
-    "fastqc --outdir 05_Output/01_fastqc/ {input}"
-
-# ----------------------------------------------
->>>>>>> bb08eafa35156c8f66c9edebb1959dc13e38ba05
 # Trimmomatic: trimming reads and removing adapter sequences
 # ----------------------------------------------
 

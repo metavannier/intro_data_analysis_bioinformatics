@@ -30,10 +30,6 @@ library(RColorBrewer)
 library(readr)
 library(DT)
 library(pcaExplorer)
-<<<<<<< HEAD
-=======
-#library(ashr)
->>>>>>> bb08eafa35156c8f66c9edebb1959dc13e38ba05
 library(EnhancedVolcano)
 ```
 

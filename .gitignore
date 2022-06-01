@@ -1,5 +1,4 @@
 .snakemake/
-00_RawData
 01_Reference
 .vscode/
 .bash_history/
