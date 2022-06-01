@@ -1,6 +1,9 @@
+<<<<<<< HEAD
 # Docker container based on a minimal Ubuntu installation that includes conda-forge's mambaforge installer.
 container: "docker://condaforge/mambaforge"
 
+=======
+>>>>>>> bb08eafa35156c8f66c9edebb1959dc13e38ba05
 import pandas as pd
 from snakemake.utils import validate, min_version
 ##### set minimum snakemake version #####
@@ -45,9 +48,17 @@ RUN_ID = expand("{samples.project}_{samples.condition}_{samples.sample}",samples
 
 rule all:
   input:
+<<<<<<< HEAD
     ## clean.smk ##
     # OUTPUTDIR + "/03_fastqc/trimmed_multiqc.html",
     ## count.smk ##
+=======
+    # expand( "05_Output/02_trimmomatic/{samples}_{run}.trimmed.fastq", samples=SAMPLES, run=RUN),
+    # expand( "05_Output/02_trimmomatic/{samples}_{run}un.trimmed.fastq", samples=SAMPLES, run=RUN),
+    # expand( "05_Output/03_fastqc/{samples}_{run}.trimmed_fastqc.html", samples=SAMPLES, run=RUN),
+    # expand( "05_Output/03_fastqc/{samples}_{run}.trimmed_fastqc.zip", samples=SAMPLES, run=RUN),
+    # OUTPUTDIR + "/03_fastqc/trimmed_multiqc.html",
+>>>>>>> bb08eafa35156c8f66c9edebb1959dc13e38ba05
     # index1 = expand( OUTPUTDIR + "{index}.1.ht2", index=index),
     # index2 = expand( OUTPUTDIR + "{index}.2.ht2", index=index),
     # index3 = expand( OUTPUTDIR + "{index}.3.ht2", index=index),
@@ -56,9 +67,31 @@ rule all:
     # index6 = expand( OUTPUTDIR + "{index}.6.ht2", index=index),
     # index7 = expand( OUTPUTDIR + "{index}.7.ht2", index=index),
     # index8 = expand( OUTPUTDIR + "{index}.8.ht2", index=index),
+<<<<<<< HEAD
     cpm = OUTPUTDIR + "07_cpm/cpm_filtered.txt",
     ## diffexp.smk ##
     html_report = OUTPUTDIR + "09_differential_expression/diffexp.html",
+=======
+    # bam = expand( OUTPUTDIR + "05_hisat/{samples}.bam", samples=SAMPLES),
+    # countmatrices = expand( OUTPUTDIR + "06_featurecounts/{samples}_count.txt", samples=SAMPLES),
+    # count_df = OUTPUTDIR + "07_cpm/count.txt",
+    # output_filter_count = OUTPUTDIR + "07_cpm/count_filtered.txt",
+    cpm = OUTPUTDIR + "07_cpm/cpm_filtered.txt",
+    rds = "05_Output/08_deseq2_init/all.rds",
+    # normalized_counts_file = "05_Output/08_deseq2_init/normalized_counts.tsv",
+    # table=expand(OUTPUTDIR + "09_differential_expression/{condition.condition}_vs_{ref_level}_all_genes_stats.tsv", condition=condition.itertuples(), ref_level=ref_level),
+    # sur=expand(OUTPUTDIR + "09_differential_expression/{condition.condition}_vs_{ref_level}_signif-up-regulated.txt", condition=condition.itertuples(), ref_level=ref_level),
+    # sdr=expand(OUTPUTDIR + "09_differential_expression/{condition.condition}_vs_{ref_level}_signif-down-regulated.txt", condition=condition.itertuples(), ref_level=ref_level),
+    # html_report = OUTPUTDIR + "09_differential_expression/diffexp.html",
+
+# ----------------------------------------------
+# setup singularity 
+# ----------------------------------------------
+
+# this container defines the underlying OS for each job when using the workflow
+# with --use-conda --use-singularity
+#singularity: "docker://continuumio/miniconda3"
+>>>>>>> bb08eafa35156c8f66c9edebb1959dc13e38ba05
 
 # ----------------------------------------------
 # setup report
@@ -70,7 +103,11 @@ report: "report/workflow.rst"
 # Impose rule order for the execution of the workflow 
 # ----------------------------------------------
 
+<<<<<<< HEAD
 ruleorder: trimmomatic > hisat_build > hisat > deseq2_init
+=======
+ruleorder: trimmomatic > fastqc_trimmed > hisat_build > hisat > featureCounts > cpm_filtering > deseq2_init > diffexp
+>>>>>>> bb08eafa35156c8f66c9edebb1959dc13e38ba05
 
 # ----------------------------------------------
 # Load rules 
