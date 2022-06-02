@@ -25,23 +25,10 @@ normalized_counts_file=snakemake@output[["normalized_counts_file"]]
 # colData and countData must have the same sample order
 cts <- as.matrix(read.table(snakemake@input[["cts"]], header=T, row.names = 1))
 
-## Pour modifier nom de colonne. A modifier pour la matrice.
-# for (i in 1:length(project)) {
-#   cts[1,] <- lapply(cts[1,], sub, pattern = paste(project[[i]],"_",sep=""), replacement = "")
-#   cts[1,] <- lapply(cts[1,], sub, pattern = paste("_",samples[[i]],"\\.bam",sep=""), replacement = "")
-# }
-# Format colData and countData for DESeq2
-# cts2 <- cts[,-1]
-# rownames(cts2) <- cts[,1]
-# cts <- cts2[-1,]
-# colnames(cts) <- cts2[1,]
-
 coldata_read <- read.delim(snakemake@input[["coldata"]], header=TRUE, comment.char="#", quote="")
 
-#### AJOUT pour avoir la même colnames pour la matrice de comptage ####
-#### IMPORTANT de regarder si les echantillons sont bien dans le bon ordre avant #####
+#### Checking if samples are in the same order in the tow files (coldata.tsv and count file) #####
 colnames(cts) <- coldata_read[,1]
-
 
 coldata <- coldata_read[,-1]
 rownames(coldata) <- coldata_read[,1]

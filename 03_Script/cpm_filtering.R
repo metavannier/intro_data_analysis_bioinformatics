@@ -77,7 +77,5 @@ for (i in 1:nrow(df_cpm_filter)) {
   ligne=subset(dataframe_total_count,dataframe_total_count[,1]==coregenes)
   dataframe_filtered_count <- rbind(dataframe_filtered_count,ligne)
 }
-# Matrix transformation for cpm calculation
+# Save the count value of the genes without low expressed genes
 write.table(dataframe_filtered_count, file = output_filter_count, quote = FALSE, row.names = FALSE, col.names = FALSE)
-
-
