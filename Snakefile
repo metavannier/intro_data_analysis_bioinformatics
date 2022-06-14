@@ -1,3 +1,5 @@
+# TEST Git
+
 # Docker container based on a minimal Ubuntu installation that includes conda-forge's mambaforge installer.
 container: "docker://condaforge/mambaforge"
 
@@ -48,17 +50,17 @@ rule all:
     ## clean.smk ##
     # OUTPUTDIR + "/03_fastqc/trimmed_multiqc.html",
     ## count.smk ##
-    # index1 = expand( OUTPUTDIR + "{index}.1.ht2", index=index),
-    # index2 = expand( OUTPUTDIR + "{index}.2.ht2", index=index),
-    # index3 = expand( OUTPUTDIR + "{index}.3.ht2", index=index),
-    # index4 = expand( OUTPUTDIR + "{index}.4.ht2", index=index),
-    # index5 = expand( OUTPUTDIR + "{index}.5.ht2", index=index),
-    # index6 = expand( OUTPUTDIR + "{index}.6.ht2", index=index),
-    # index7 = expand( OUTPUTDIR + "{index}.7.ht2", index=index),
+    index1 = expand( OUTPUTDIR + "{index}.1.ht2", index=index),
+    index2 = expand( OUTPUTDIR + "{index}.2.ht2", index=index),
+    index3 = expand( OUTPUTDIR + "{index}.3.ht2", index=index),
+    index4 = expand( OUTPUTDIR + "{index}.4.ht2", index=index),
+    index5 = expand( OUTPUTDIR + "{index}.5.ht2", index=index),
+    index6 = expand( OUTPUTDIR + "{index}.6.ht2", index=index),
+    index7 = expand( OUTPUTDIR + "{index}.7.ht2", index=index),
     # index8 = expand( OUTPUTDIR + "{index}.8.ht2", index=index),
-    cpm = OUTPUTDIR + "07_cpm/cpm_filtered.txt",
+    # cpm = OUTPUTDIR + "07_cpm/cpm_filtered.txt",
     ## diffexp.smk ##
-    html_report = OUTPUTDIR + "09_differential_expression/diffexp.html",
+    # html_report = OUTPUTDIR + "09_differential_expression/diffexp.html",
 
 # ----------------------------------------------
 # setup report
