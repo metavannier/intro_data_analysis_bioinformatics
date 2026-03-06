@@ -8,7 +8,7 @@ Thomas Vannier (@metavannier), https://centuri-livingsystems.org/t-vannier/
 
 This workflow performs an RNA-seq analysis from the sequencing output data to the differential expression analyses.
 
-You need to install [Singularity](https://github.com/hpcng/singularity/blob/master/INSTALL.md#install-golang) on your computer. This workflow also work in a slurm environment.
+You need to install [apptainer](https://apptainer.org/docs/admin/main/installation.html) on your computer. This workflow also work in a slurm environment.
 
 Each snakemake rules call a specific conda environment. In this way you can easily change/add tools for each step if necessary. 
 
@@ -35,15 +35,32 @@ Configure the workflow according to your needs via editing the files and reposit
 
 ### Step 3: Execute workflow
 
-- You need [Singularity v3.5.3](https://github.com/hpcng/singularity/blob/master/INSTALL.md#install-golang) installed on your computer or cluster.
+## If you are on your local machine :
+
+- You need [apptainer version 1.4.0](https://apptainer.org/docs/admin/main/installation.html) installed on your computer or cluster.
 
 - Load snakemake from a docker container and run the workflow from the root by using these commands:
 
-`singularity run docker://snakemake/snakemake:v6.3.0`
+`apptainer run docker://snakemake/snakemake:v9.4.0`
 
 - Then execute the workflow locally via
 
 `snakemake  --use-conda --use-singularity --cores 10`
+
+## If you are on a slurm cluster
+
+- Do the modification on the slur script 'slurm_workflow.sh'
+
+`vim slurm_workflow.sh -> "i" -> change what you need -> esc or Echap -> save ":x"`
+
+- Submit the job with slurm
+
+`sbatch slurm_workflow.sh`
+
+- or with srun
+
+`module load snakemake`
+`srun --mem=32G --cpus-per-task=8 snakemake --cores 8 --use-conda --use-singularity`
 
 ### Step 4: Investigate results 
 

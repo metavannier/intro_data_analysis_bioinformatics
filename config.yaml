@@ -5,19 +5,19 @@ condition: condition.tsv
 
 run:
     # Can be a list if pair-end : "R1,R2" or "1,2"
-    type: "1"
+    type: "R1,R2"
     # paired or unpaired fastq file
-    reads: "unpaired"
+    reads: "paired"
     # Extension for the input fastq file
     ext: "fastq.gz"
 
 ref:
     # Reference Genome (must be unziped)
-    genome: "GCF_000146045.2_R64_genomic.fna"
+    genome: "genome.fa"
     # The Hisat index
     index: "04_index/R64"
     # gtf file with transcripts
-    annotation: "GCF_000146045.2_R64_genomic.gtf"
+    annotation: "gencode.vM38.annotation.gtf"
     # Gene id for the figures
     geneid: "gene_id"
 

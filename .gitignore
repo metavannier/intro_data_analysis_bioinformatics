@@ -9,3 +9,4 @@
 .local/
 .singularity/
 snakemake_virtenv/
+05_Output/

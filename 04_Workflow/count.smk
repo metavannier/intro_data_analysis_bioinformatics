@@ -1,38 +1,39 @@
-SAMPLES = expand("{samples.project}_{samples.condition}_{samples.sample}",samples=samples.itertuples())
+SAMPLES = expand("{samples.sample}",samples=samples.itertuples())
 
 # ----------------------------------------------
 # HISAT2-build: Indexing a reference genome
 # ----------------------------------------------
-rule hisat_build:
-  output:
-    expand( OUTPUTDIR + "{index}.1.ht2", index=index),
-    expand( OUTPUTDIR + "{index}.2.ht2", index=index),
-    expand( OUTPUTDIR + "{index}.3.ht2", index=index),
-    expand( OUTPUTDIR + "{index}.4.ht2", index=index),
-    expand( OUTPUTDIR + "{index}.5.ht2", index=index),
-    expand( OUTPUTDIR + "{index}.6.ht2", index=index),
-    expand( OUTPUTDIR + "{index}.7.ht2", index=index),
-    expand( OUTPUTDIR + "{index}.8.ht2", index=index)
-
-  input:
-    ref = REF + config["ref"]["genome"]
-
-  params:
-    index = OUTPUTDIR + config["ref"]["index"]
-
-  conda: 
-    CONTAINER + "hisat2.yaml"
-
-  shell:
-    """
-    input={input.ref}
-    output={params.index}
-    if [ ${{input}} == '*.gz' ];then
-      gunzip ${{input}}
-      input="${{input%.*}}"
-    fi
-    hisat2-build ${{input}} ${{output}}
-    """
+#rule hisat_build:
+#  output:
+#    expand( OUTPUTDIR + "{index}.1.ht2", index=index),
+#    expand( OUTPUTDIR + "{index}.2.ht2", index=index),
+#    expand( OUTPUTDIR + "{index}.3.ht2", index=index),
+#    expand( OUTPUTDIR + "{index}.4.ht2", index=index),
+#    expand( OUTPUTDIR + "{index}.5.ht2", index=index),
+#    expand( OUTPUTDIR + "{index}.6.ht2", index=index),
+#    expand( OUTPUTDIR + "{index}.7.ht2", index=index),
+#    expand( OUTPUTDIR + "{index}.8.ht2", index=index)
+#
+#  input:
+#    sample_trimmed=expand( OUTPUTDIR + "02_trimmomatic/{samples}_{run}.trimmed.fastq", samples=SAMPLES, run=RUN),
+#    ref = expand( REF + config["ref"]["genome"])
+#
+#  params:
+#    index = OUTPUTDIR + config["ref"]["index"]
+#
+#  conda: 
+#    CONTAINER + "hisat2.yaml"
+#
+#  shell:
+#    """
+#    input={input.ref}
+#    output={params.index}
+#    if [ ${{input}} == '*.gz' ];then
+#      gunzip ${{input}}
+#      input="${{input%.*}}"
+#    fi
+#    hisat2-build ${{input}} ${{output}}
+#    """
 
 # ----------------------------------------------
 # HISAT2: alignment of NGS reads to a population of genomes
@@ -42,12 +43,14 @@ rule hisat:
     bam = expand( OUTPUTDIR + "05_hisat/{samples}.bam", samples=SAMPLES)
     
   input:
-    sample_trimmed=expand( OUTPUTDIR + "02_trimmomatic/{samples}_{run}.trimmed.fastq", samples=SAMPLES, run=RUN)
+    expand(OUTPUTDIR + "03_fastqc/{samples}_{run}.trimmed_fastqc.html", samples=SAMPLES, run=RUN),
+    index_done = expand(OUTPUTDIR + "{index}.1.ht2", index=index)
 
   conda: 
     CONTAINER + "hisat2.yaml"
 
   params:
+    sample_trimmed=expand( OUTPUTDIR + "02_trimmomatic/{samples}_{run}.trimmed.fastq", samples=SAMPLES, run=RUN),
     sam = expand( OUTPUTDIR + "05_hisat/{samples}.sam", samples=SAMPLES),
     reads = config["run"]["reads"],
     index = OUTPUTDIR + config["ref"]["index"]
@@ -55,7 +58,7 @@ rule hisat:
   shell:
     """
     index={params.index}
-    sample_trimmed=({input.sample_trimmed})
+    sample_trimmed=({params.sample_trimmed})
     len=${{#sample_trimmed[@]}}
     reads=({params.reads})
     sam=({params.sam})
@@ -88,7 +91,7 @@ rule featureCounts:
     countmatrices = expand( OUTPUTDIR + "06_featurecounts/{samples}_count.txt", samples=SAMPLES)
     
   input:
-    annotation = REF + config["ref"]["annotation"],
+    annotation = expand( REF + config["ref"]["annotation"]),
     bam = expand( OUTPUTDIR + "05_hisat/{samples}.bam", samples=SAMPLES)
 
   conda: 

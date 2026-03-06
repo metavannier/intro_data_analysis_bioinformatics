@@ -1,10 +1,11 @@
-# TEST Git
-
 # Docker container based on a minimal Ubuntu installation that includes conda-forge's mambaforge installer.
 container: "docker://condaforge/mambaforge"
 
 import pandas as pd
 from snakemake.utils import validate, min_version
+import os
+srcdir = workflow.basedir
+
 ##### set minimum snakemake version #####
 min_version("5.1.2")
 
@@ -25,40 +26,34 @@ validate(coldata, schema="06_Schemas/condition.schema.yaml")
 
 ##### Set variables ####
 ROOTDIR = os.getcwd()
-RAWDATA = srcdir("00_RawData/")
-REF = srcdir("01_Reference/")
-CONTAINER = srcdir("02_Container/")
-SCRIPTDIR = srcdir("03_Script/")
-ENVDIR = srcdir("04_Workflow/")
-OUTPUTDIR = srcdir("05_Output/")
-REPORT = srcdir("07_Report/")
+RAWDATA = os.path.join("/shared/projects/tp_2626_biological_data_183961/data/")
+REF = os.path.join("/shared/projects/tp_2626_biological_data_183961/ref/")
+CONTAINER = os.path.join(ROOTDIR, "02_Container") + "/"
+SCRIPTDIR = os.path.join(ROOTDIR, "03_Script") + "/"
+ENVDIR = os.path.join(ROOTDIR, "04_Workflow") + "/"
+OUTPUTDIR = os.path.join(ROOTDIR, "05_Output") + "/"
+REPORT = os.path.join(ROOTDIR, "07_Report") + "/"
 
 # ----------------------------------------------
 # Target rules
 # ----------------------------------------------
-SAMPLES = expand("{samples.project}_{samples.condition}_{samples.sample}",samples=samples.itertuples())
+# SAMPLES = expand("{samples.project}_{samples.condition}_{samples.sample}",samples=samples.itertuples())
+SAMPLES = expand("{samples.sample}",samples=samples.itertuples())
 RUN =  config["run"]["type"].split(',')
 EXT = config["run"]["ext"]
 ref_level = config["diffexp"]["ref_level"]
 genome = config["ref"]["genome"]
 index = config["ref"]["index"]
 annotation = config["ref"]["annotation"]
-RUN_ID = expand("{samples.project}_{samples.condition}_{samples.sample}",samples=samples.itertuples())
+# RUN_ID = expand("{samples.project}_{samples.condition}_{samples.sample}",samples=samples.itertuples())
+RUN_ID = expand("{samples.sample}",samples=samples.itertuples())
 
 rule all:
   input:
     ## clean.smk ##
-    # OUTPUTDIR + "/03_fastqc/trimmed_multiqc.html",
+    expand( OUTPUTDIR + "03_fastqc/{samples}_{run}.trimmed_fastqc.html", samples=SAMPLES, run=RUN),
     ## count.smk ##
-    index1 = expand( OUTPUTDIR + "{index}.1.ht2", index=index),
-    index2 = expand( OUTPUTDIR + "{index}.2.ht2", index=index),
-    index3 = expand( OUTPUTDIR + "{index}.3.ht2", index=index),
-    index4 = expand( OUTPUTDIR + "{index}.4.ht2", index=index),
-    index5 = expand( OUTPUTDIR + "{index}.5.ht2", index=index),
-    index6 = expand( OUTPUTDIR + "{index}.6.ht2", index=index),
-    index7 = expand( OUTPUTDIR + "{index}.7.ht2", index=index),
-    # index8 = expand( OUTPUTDIR + "{index}.8.ht2", index=index),
-    # cpm = OUTPUTDIR + "07_cpm/cpm_filtered.txt",
+    expand(OUTPUTDIR + "06_featurecounts/{samples}_count.txt", samples=SAMPLES)
     ## diffexp.smk ##
     # html_report = OUTPUTDIR + "09_differential_expression/diffexp.html",
 
@@ -67,12 +62,6 @@ rule all:
 # ----------------------------------------------
 
 report: "report/workflow.rst"
-
-# ----------------------------------------------
-# Impose rule order for the execution of the workflow 
-# ----------------------------------------------
-
-ruleorder: trimmomatic > hisat_build > hisat > deseq2_init
 
 # ----------------------------------------------
 # Load rules 
