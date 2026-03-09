@@ -54,7 +54,9 @@ rule hisat:
     sample_trimmed=expand( OUTPUTDIR + "02_trimmomatic/{samples}_{run}.trimmed.fastq", samples=SAMPLES, run=RUN),
     sam = expand( OUTPUTDIR + "05_hisat/{samples}.sam", samples=SAMPLES),
     reads = config["run"]["reads"],
-    index = OUTPUTDIR + config["ref"]["index"]
+#    index = OUTPUTDIR + config["ref"]["index"]
+    index = REF + config["ref"]["index"]
+
 
   shell:
     """

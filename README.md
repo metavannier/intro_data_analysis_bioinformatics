@@ -32,6 +32,7 @@ Configure the workflow according to your needs via editing the files and reposit
 - 01_Reference the fasta file and gff/gtf of your reference genome for the mapping step
 - [sample.tsv](/sample.tsv), [coldata.tsv](/coldata.tsv) and [condition.tsv](/condition.tsv) to indicate the samples, run, condition, etc. for the analyse.
 - [config.yaml](/config.yaml) indicating the parameters to use.
+- If you don't run HISAT2-build change the path of index on the rule hisat with your reository where are your indexed files.
 
 ### Step 3: Execute workflow
 
