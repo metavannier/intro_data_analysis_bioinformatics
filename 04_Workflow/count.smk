@@ -44,7 +44,8 @@ rule hisat:
     
   input:
     expand(OUTPUTDIR + "03_fastqc/{samples}_{run}.trimmed_fastqc.html", samples=SAMPLES, run=RUN),
-    index_done = expand(OUTPUTDIR + "{index}.1.ht2", index=index)
+    index_done = expand(REF + "{index}.1.ht2", index=index)
+#    index_done = expand(OUTPUTDIR + "{index}.1.ht2", index=index)
 
   conda: 
     CONTAINER + "hisat2.yaml"
