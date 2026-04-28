@@ -51,7 +51,7 @@ RUN_ID = expand("{samples.sample}",samples=samples.itertuples())
 rule all:
   input:
     ## clean.smk ##
-    expand( OUTPUTDIR + "03_fastqc/{samples}_{run}.trimmed_fastqc.html", samples=SAMPLES, run=RUN),
+    # expand( OUTPUTDIR + "03_fastqc/{samples}_{run}.trimmed_fastqc.html", samples=SAMPLES, run=RUN),
     ## count.smk ##
     expand(OUTPUTDIR + "06_featurecounts/{samples}_count.txt", samples=SAMPLES)
     ## diffexp.smk ##
